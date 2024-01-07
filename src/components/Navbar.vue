@@ -30,12 +30,12 @@
                 <ul class="list-style-none mr-auto flex flex-col pl-0 lg:flex-row font-medium">
                     <li class="mb-4 lg:mb-0 lg:pr-2 me-4">
                         <router-link to="/">
-                            Trang chủ
+                            Home
                         </router-link>
                     </li>
                     <li class="mb-4 lg:mb-0 lg:pr-2 me-4">
                         <span to="/topics">
-                            Chủ đề
+                            Topic
                         </span>
                         <span><i class="fa-solid fa-caret-down"></i></span>
 
@@ -48,17 +48,17 @@
                     </li>
                     <li v-if="userStore.getIsAuthenticated" class="mb-4 lg:mb-0 lg:pr-2 me-4">
                         <router-link to="/classes">
-                            Lớp học
+                            Class
                         </router-link>
                     </li>
                     <li v-if="userStore.getIsAuthenticated" class="mb-4 lg:mb-0 lg:pr-2 me-4">
                         <router-link to="/decks">
-                            Bộ thẻ
+                            Deck
                         </router-link>
                     </li>
                     <li v-if="userStore.getIsAuthenticated" class="mb-4 lg:mb-0 lg:pr-2 me-4">
                         <router-link to="/cards">
-                            Thẻ
+                            Card
                         </router-link>
                     </li>
                 </ul>
@@ -88,10 +88,9 @@
                                     <i class="fa-solid fa-plus"></i>
                                 </div>
                             </div>
-
                             <div class="dropdown-content-right">
-                                <a>Bộ thẻ</a>
-                                <a>Lớp</a>
+                                <router-link to="/decks/create">Deck</router-link>
+                                <router-link to="/classes">Class</router-link>
                             </div>
                         </div>
 

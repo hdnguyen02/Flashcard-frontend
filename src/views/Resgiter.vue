@@ -104,7 +104,6 @@
                 </form>
             </div>
             <div class="flex justify-center items-center mt-6">
-               
                 <router-link to="/login" class="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center">
                     <span>
                       <svg class="h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">

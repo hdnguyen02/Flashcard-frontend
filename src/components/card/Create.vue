@@ -64,8 +64,8 @@
               <input ref="tagName" type="text"
                 class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 outline-yellow-400 outline-4"
                 placeholder="Tên tag" />
-              <button type="button" @click="handlerAddTag"
-                class="text-white absolute right-2.5 bottom-1.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              <button type="button" @click="handleAddTag"
+                class="text-white absolute right-2.5 bottom-1.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1">
                 Thêm tag
               </button>
             </div>
@@ -82,18 +82,17 @@
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
           <!-- Modal header -->
           <div class="px-6 py-4 border-b rounded-t dark:border-gray-600">
-            <h3 class="text-base font-semibold text-gray-900 lg:text-xl dark:text-white">
+            <h3 class="text-base font-semibold text-gray-900 lg:text-xl ">
               Danh sách tag
             </h3>
           </div>
-          <!-- Modal body -->
           <div class="px-6 py-8">
-            <p class="hidden md:block text-sm font-normal text-gray-500 dark:text-gray-400">
+            <p class="hidden md:block text-sm font-normal text-gray-500">
               Thiết lập tag giúp bạn quản lý thẻ tốt hơn
             </p>
-            <ul class="my-4 space-y-3 overflow-y-auto h-[228px]">
+            <ul class="my-4 space-y-3 overflow-y-auto h-[180px]">
               <li v-for="tag in tags" :key="tag.id"
-                class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+                class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow">
                 <i class="fa-solid fa-tag"></i>
                 <span class="flex-1 ml-3 whitespace-nowrap">{{
                   tag.name
@@ -101,25 +100,23 @@
                 <input :value="tag.id" v-model="card.idTags" type="checkbox" />
               </li>
             </ul>
-            
           </div>
         </div>
       </div>
     </div>
-
-    <!-- * model tag -->
   </div>  
-  <Failure v-if="isSuccess == false" :message="message"></Failure>
-  <Success v-if="isSuccess == true" :message="message"></Success>
+  <Notification ref="notification" :message="message"></Notification>
+
 </template>
 
 <script>
-import axios from "axios";
-import Success from "../alert/Success.vue";
-import Failure from "../alert/Failure.vue";
+import axios from "axios" 
+import Notification from "../utilities/Notification.vue"
 
 export default {
-  props: [],
+  components: {
+    Notification
+  }, 
   data() {
     return {
       idDeck: this.$route.params.idDeck,
@@ -127,99 +124,65 @@ export default {
         term: null,
         definition: null,
         extractInfo: null,
-        idTags: [], // chứa id của tag.
+        idTags: [], 
       },
       tags: null,
-      messageAlert: null,
-      isSuccess: null,
       message: null,
     };
   },
   created() {
-    this.getTags();
+    this.getTags()
   },
   methods: {
-    getTags() {
-      this.$axios.get("api/v1/tags").then((apiResponse) => {
-        const response = apiResponse.data;
-        this.tags = response.data;
-      });
+     getTags() {
+      this.$axios.get("api/v1/tags")
+        .then(apiResponse => {
+          const response = apiResponse.data
+          this.tags = response.data
+        })
     },
 
     handlerAddCard() {
-      const formData = new FormData();
-      formData.append("term", this.card.term);
-      formData.append("definition", this.card.definition);
-      formData.append("extractInfo", this.card.extractInfo);
-      formData.append("image", this.$refs.image.files[0]);
-      formData.append("audio", this.$refs.audio.files[0]);
-      formData.append("idTags", this.card.idTags);
+      const formData = new FormData()
+      formData.append("term", this.card.term)
+      formData.append("definition", this.card.definition)
+      formData.append("extractInfo", this.card.extractInfo)
+      formData.append("image", this.$refs.image.files[0])
+      formData.append("audio", this.$refs.audio.files[0])
+      formData.append("idTags", this.card.idTags)
 
-      axios
-        .post(
-          `http://localhost:8080/api/v1/decks/${this.idDeck}/cards`,
-          formData,
-          {
+      let config = {
             headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        )
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+      }
+      
+      axios.post(`http://localhost:8080/api/v1/decks/${this.idDeck}/cards`, formData,config)
         .then((apiResponse) => {
-          const response = apiResponse.data;
-          this.message = response.message;
-          this.isSuccess = false;
-          setTimeout(() => {
-            this.message = "";
-            this.isSuccess = null;
-          }, 2000);
-
-          this.card.term = this.card.definition = this.card.extractInfo = null;
-          this.$refs.image.value = this.$refs.audio.value = null;
-
-          this.message = "Thêm thành công";
-          this.isSuccess = true;
-          setTimeout(() => {
-            this.message = "";
-            this.isSuccess = null;
-          }, 2000);
+          const response = apiResponse.data
+          this.message = response.message
+          this.card.term = this.card.definition = this.card.extractInfo = null
+          this.$refs.image.value = this.$refs.audio.value = null
+          this.message = "Create card success!"
+          this.$refs.notification.showAlert()
         })
-        .catch((error) => {
-          const message = error.response.data.message;
-          this.message = message;
-          this.isSuccess = false;
-          setTimeout(() => {
-            this.message = "";
-            this.isSuccess = null;
-          }, 2000);
-        });
+        .catch(error => {
+          this.message = "Create card failure!"
+          this.$refs.notification.showAlert()
+        })
     },
 
-    handlerAddTag() {
-      const tagName = this.$refs.tagName.value;
-      this.$axios
-        .post("api/v1/tags", {
-          name: tagName,
+    handleAddTag() {
+      const tagName = this.$refs.tagName.value
+      this.$axios.post("api/v1/tags", { name: tagName,})
+        .then(apiResponse => {
+          const response = apiResponse.data
+          this.message = response.message
+          this.tagName = null
+          this.getTags()
         })
-        .then((apiResponse) => {
-          this.tagName = null;
-          const response = apiResponse.data;
-          console.log(response);
-          this.message = response.message;
-          this.isSuccess = true;
-          setTimeout(() => {
-            this.message = "";
-            this.isSuccess = null;
-          }, 2000);
-          this.getTags();
-        });
     },
-  },
-
-  components: {
-    Success,
-    Failure,
   },
 };
 </script>

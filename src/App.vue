@@ -1,5 +1,3 @@
-
-
 <template>
   <Navbar></Navbar>
   <div>

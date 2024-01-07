@@ -31,11 +31,6 @@ const routes = [
      
 
   },
-  // {
-  //   path: "/cards/:id", 
-  //   name: "CardDetail",
-  //   component:() => import('../components/card/Detail.vue')      
-  // },
   {
     path: "/decks",
     name: "Desk",

@@ -1,6 +1,4 @@
 <template>
-    <!-- component -->
-<!-- <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v5.15.1/css/pro.min.css" /> -->
 
 <div class="flex flex-col items-center mx-8">
   <div class="flex flex-col bg-gray-50 shadow-lg px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
@@ -25,7 +23,7 @@
               </svg>
             </div>
 
-            <input v-model="email" id="email" type="email" class="text-sm sm:text-base text-black placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="E-Mail Address" />
+            <input @focus="errorLogin = null" v-model="email" id="email" type="email" class="text-sm sm:text-base text-black placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="E-Mail Address" />
           </div>
         </div>
         <div class="flex flex-col mb-6">
@@ -39,7 +37,7 @@
               </span>
             </div>
 
-            <input v-model="password" id="password" type="password" class="text-sm sm:text-base text-black placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="Password" />
+            <input @focus="errorLogin = null" v-model="password" id="password" type="password" class="text-sm sm:text-base text-black placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="Password" />
           </div>
           <span v-if="errorLogin" class="text-red-500">{{errorLogin}}</span>
         </div>
@@ -100,11 +98,10 @@ import { useUserStore } from '../stores/useUserStore.js'
                 const token = response.data.token 
                 localStorage.setItem("token", token)
                 this.userStore.setAuthenticated(true)
-                this.$router.push("/") //  về lại trang home. 
+                this.$router.push("/") 
               })
               .catch(error => {
-                console.log(error)
-
+                this.errorLogin = error.response.data.message
               })
 
           },
