@@ -12,14 +12,16 @@
 
 <script>
      export default { 
-        props: ['message'], 
+ 
         data() {
             return { 
+                mesasge: null, 
                 show: false
             }
         }, 
         methods: {
-            showAlert() {
+            showAlert(message) {
+                this.message = message
                 this.show = true 
                 setTimeout(() => {
                     this.show = false 

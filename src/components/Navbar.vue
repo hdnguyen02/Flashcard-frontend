@@ -72,7 +72,7 @@
                 </div>
                 <div v-if="!userStore.getIsAuthenticated">
                     <router-link to="/register"
-                        class="text-black inline-block rounded px-6 py-2.5 font-medium shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+                        class="text-black inline-block rounded px-6 py-1.5 font-medium shadow-md"
                         style="background-color: #FFCD1F">
                         Đăng ký
                     </router-link>
@@ -102,7 +102,7 @@
                                 <img class="h-4 w-4" src="../assets/image/dropdown.png">
                             </div>
                             <div class="dropdown-content-right">
-                                <a>Your profile</a>
+                                <router-link to="/user">Your profile</router-link>
                                 <a>Setting</a>
                                 <a @click="handleLogout">Sign out</a>
                             </div>

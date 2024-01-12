@@ -77,7 +77,7 @@
             </div>
         </div>
     </div>
-    <Notification ref="notification" :message="message" />
+    <Notification ref="notification"/>
 </template>
 
 <script>
@@ -94,7 +94,6 @@ export default {
             isShowAlert: false,
             idDeck: this.$route.params.idDeck,
             idLabels: [],
-            message: null
         };
     },
     computed: {
@@ -112,12 +111,10 @@ export default {
                 let apiResponse = await this.$axios.put('api/v1/decks/' + this.idDeck, body)
                 let response = apiResponse.data
                 this.deck = response.data
-                this.message = response.message
-                this.$refs.notification.showAlert()
+                this.$refs.notification.showAlert("Success!")
             }
             catch (error) {
-                this.message = "Error!"
-                this.$refs.notification.showAlert()
+                this.$refs.notification.showAlert("Failure!")
             }
         },
         async getdeckWithId() {
@@ -130,8 +127,7 @@ export default {
                 })
             }
             catch (error) {
-                this.message = "Error!"
-                this.$refs.notification.showAlert()
+                this.$refs.notification.showAlert("Failure!")
             }
 
         }

@@ -1,9 +1,9 @@
 <template>
     <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v5.15.1/css/pro.min.css" />
 
-    <div class="min-h-screen flex flex-col items-center justify-center mt-[74px]">
+    <div class="min-h-screen flex flex-col items-center justify-center">
         <div class="flex flex-col bg-gray-50 shadow-lg px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
-            <div class="font-medium self-center text-xl sm:text-2xl uppercase text-gray-800">
+            <div class="font-medium self-center text-sm sm:text-xl uppercase text-gray-800">
                 Resgiter To Your Account
             </div>
             <button class="relative mt-6 border rounded-md py-2 text-sm text-gray-800 bg-gray-100 hover:bg-gray-200">
@@ -81,7 +81,7 @@
                                 </span>
                             </div>
 
-                            <input @focus="forcusDateHandler" v-model="register.birthdate" type="date" id="birthdate" required
+                            <input @focus="forcusDateHandler" v-model="register.birthdate" type="date" id="birthdate"
                                 class="text-sm sm:text-base text-black placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" />
                         </div>
                         <span class="text-red-600">{{errorRegister.birthdate}}</span>
@@ -118,7 +118,12 @@
 </template>
 
 <script>
+import { mapStores } from 'pinia'
+import { useUserStore } from '../stores/useUserStore.js'
 export default {
+    computed: {
+        ...mapStores(useUserStore),
+    },
     data() {
         return {
             register: {
@@ -139,10 +144,10 @@ export default {
                 this.$axios.post("/api/v1/auth/register",this.register)
                     .then(apiResponse => {
                         this.response = apiResponse.data 
-                        console.log(this.response)
                         if (this.response.status == 'failure') throw this.response
                         const token  = this.response.data.token
                         localStorage.setItem("token", token)
+                        this.userStore.setAuthenticated(true)
                         this.$router.push("/")
 
                     })

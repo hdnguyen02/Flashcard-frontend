@@ -105,7 +105,7 @@
       </div>
     </div>
   </div>  
-  <Notification ref="notification" :message="message"></Notification>
+  <Notification ref="notification"></Notification>
 
 </template>
 
@@ -127,7 +127,6 @@ export default {
         idTags: [], 
       },
       tags: null,
-      message: null,
     };
   },
   created() {
@@ -164,12 +163,10 @@ export default {
           this.message = response.message
           this.card.term = this.card.definition = this.card.extractInfo = null
           this.$refs.image.value = this.$refs.audio.value = null
-          this.message = "Create card success!"
-          this.$refs.notification.showAlert()
+          this.$refs.notification.showAlert("Success!")
         })
         .catch(error => {
-          this.message = "Create card failure!"
-          this.$refs.notification.showAlert()
+          this.$refs.notification.showAlert("Failure!")
         })
     },
 

@@ -79,7 +79,7 @@
             </div>
         </div>
     </div>
-    <Notification ref="notification" :message="message" />
+    <Notification ref="notification"/>
 
 </template>
 
@@ -98,7 +98,6 @@ export default {
                 isPublic: true,
                 idLabels: [] 
             },
-            message: null
         };
     },
     computed: {
@@ -109,12 +108,11 @@ export default {
             try { 
                 await this.$axios.post("api/v1/decks", this.deck)
                 this.message = "Create deck success!"
-                this.$refs.notification.showAlert()
+                this.$refs.notification.showAlert("Success!")
                 
             }
             catch(error) {
-                this.message = "Create deck failure!"
-                this.$refs.notification.showAlert()
+                this.$refs.notification.showAlert("Failure!")
             }
             this.deck.name = this.deck.description = null
             this.isPublic = true 

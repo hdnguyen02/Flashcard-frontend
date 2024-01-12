@@ -1,21 +1,41 @@
 <template>
-    <div v-show="cards">
-
+    <div v-if="cards">
         <button class="ml-8 flex items-center gap-x-2 md:hidden bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
             <span>Filter</span>
             <span><i class="fa-solid fa-filter text-xs"></i></span>
         </button>
-        <div
-            class="border-b md:block mt-2 md:mt-0 pb-2 md:bg-inherit px-8 md:border-r md:fixed md:top-0 md:bottom-0 md:left-0 md:pl-8 md:w-60 md:overflow-y-auto md:h-screen md:pt-20">
+        <div class="border-b md:block mt-2 md:mt-0 pb-2 md:bg-inherit px-8 md:border-r md:fixed md:top-0 md:bottom-0 md:left-0 md:pl-8 md:w-60 md:overflow-y-auto md:h-screen md:pt-20">
+            
+            <div class="mt-4 ml-4"> 
+                <div class="my-2">
+                    <button @click="handleDeleteCards" class="w-32 inline-flex h-8 text-sm items-center justify-center px-4 py-2  leading-6 text-white whitespace-no-wrap bg-blue-600 border border-blue-700 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-rounded="rounded-md" data-primary="blue-600">
+                        <span class="ml-2">Delete card</span>
+                    </button>
+                </div>
+
+                <div class="my-2">
+                    <button @click="isShowAssignTag = true" class="text-white w-32 inline-flex h-8 text-sm items-center justify-center px-4 py-2  leading-6 whitespace-no-wrap bg-yellow-600 border border-yellow-700 rounded-md shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" data-rounded="rounded-md" data-primary="blue-600">
+                        <span class="ml-2">Assign tag</span>
+                    </button>
+                </div>
+                <div class="my-2">
+                    <button @click="handleDeleteFilter" class="text-white w-32 inline-flex h-8 text-sm items-center justify-center px-4 py-2  leading-6 whitespace-no-wrap bg-green-600 border border-green-700 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" data-rounded="rounded-md" data-primary="blue-600">
+                        <span class="ml-2">Delete filter</span>
+                    </button>
+                </div>
+            </div>
+
+            <hr class="mt-8">
+            
             <div>
-                <p class="hidden md:block text-xl font-medium text-center border-b pb-2">Filter</p>
+                <!-- <p class="hidde md:block text-xl font-medium text-center border-b pb-2">Filter</p> -->
                 <div>
                     <div class="mt-4 ml-4">
                         <span class="font-medium">Bộ thẻ</span>
                         <div v-for="deck in decks" :key="deck.id" class="flex items-center my-1">
                             <input :value="deck.id" v-model="valueFilter" data-type-filter="id-deck" name="value-filter"
                                 type="radio" class="w-4 h-4 text-blue-600  border-gray-300">
-                            <label class="ms-2">{{ deck.name }}</label>
+                            <label class="ms-2 text-sm">{{ deck.name }}</label>
                         </div>
                     </div>
                 </div>
@@ -26,24 +46,22 @@
                         <div class="flex items-center my-1">
                             <input data-type-filter="type" value="LEARNING" v-model="valueFilter" name="value-filter"
                                 type="radio" class="w-4 h-4 text-blue-600  border-gray-300">
-                            <label class="ms-2">Thẻ đang học</label>
+                            <label class="ms-2 text-sm">Thẻ đang học</label>
                         </div>
                         <div class="flex items-center my-1">
                             <input data-type-filter="type" type="radio" value="REVIEW" name="value-filter"
                                 v-model="valueFilter" class="w-4 h-4 text-blue-600  border-gray-300">
-                            <label class="ms-2">Thẻ review</label>
+                            <label class="ms-2 text-sm">Thẻ review</label>
                         </div>
                         <div class="flex items-center my-1">
                             <input data-type-filter="type" type="radio" value="FRESH" name="value-filter"
                                 v-model="valueFilter" class="w-4 h-4 text-blue-600  border-gray-300">
-                            <label class="ms-2">Thẻ mới</label>
+                            <label class="ms-2 text-sm">Thẻ mới</label>
                         </div>
                     </div>
                 </div>
 
                 <div>
-
-
                     <div class="mt-4 ml-4">
                         <span class="font-medium">Tags</span>
                         <div v-for="tag in tags" :key="tag.id" class="flex items-center my-1">
@@ -54,27 +72,13 @@
                     </div>
                 </div>
                 <div>
-                    <div class="mt-4 ml-4">
-                        <span class="font-medium">Chức năng</span>
-                        <div class="my-1">
-                            <a @click="handleDeleteCards" class="underline cursor-pointer " data-rounded="rounded-md">
-                                Xóa thẻ
-                            </a>
-                        </div>
-
-                        <div class="my-1">
-                            <a @click="isShowAssignTag = true" class="underline cursor-pointer my-1"
-                                data-rounded="rounded-md">
-                                Gán tag
-                            </a>
-                        </div>
-                    </div>
                 </div>
+                
             </div>
         </div>
 
         <div class="mt-4 md:mt-0 md:ml-60 px-8 md:px-16">
-            <table class="">
+            <table v-if="cards.length != 0" class="">
                 <tbody class="divide-y divide-gray-100">
                     <tr v-for="(card, index) in cards" :data-flag="card.id">
                         <td class="py-2 px-2 text-sm text-gray-800">
@@ -96,6 +100,14 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div v-else>
+                <div class="flex justify-center gap-x-5">
+                    <p  class="text-blue-600">
+                        Card does not exist
+                    </p>
+                </div>
+            </div>
         </div>
 
         <div v-if="isShowDetail">
@@ -104,9 +116,9 @@
         <div v-if="isShowAssignTag">
             <AssignTag @assignTag="handleAssignTag" @closeAssignTag="handleCloseAssignTag" />
         </div>
-
     </div>
-    <Notification ref="notification" :message="message" />
+    
+    <Notification ref="notification"/>
 </template>
 <script>
 
@@ -124,7 +136,7 @@ export default {
             card: null,
             isShowDetail: false,
             isShowAssignTag: false,
-            message: null
+            
         };
     },
     methods: {
@@ -208,8 +220,12 @@ export default {
                 }
             }
             this.isShowAssignTag = false
-            this.message = "Gán tag thành công!"
-            this.$refs.notification.showAlert()
+            this.$refs.notification.showAlert("Success!")
+        }, 
+        handleDeleteFilter() {
+            let filter = document.querySelector('input[type="radio"][name="value-filter"]:checked') 
+            filter.checked = false
+            this.getCards()
         }
     },
     created() {
@@ -219,11 +235,10 @@ export default {
     },
     watch: {
         valueFilter(value) {
-            let filter = document.querySelector('input[type="radio"][name="value-filter"]:checked').dataset.typeFilter;
+            let filter = document.querySelector('input[type="radio"][name="value-filter"]:checked').dataset.typeFilter
             this.getCards(filter, value)
         }
     },
-
 }
 
 </script>

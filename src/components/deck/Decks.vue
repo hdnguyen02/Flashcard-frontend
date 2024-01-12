@@ -13,7 +13,7 @@
             <div class="mt-8">
                 <div class="relative" v-for="deck in decks" :key="deck.id" :data-id-deck="deck.id">
                     <router-link :to="`/decks/${deck.id}/study`"
-                        class="mb-3 flex flex-col gap-1 hover-pointer py-2 px-4 bg-white border border-gray-200 hover:border-b-purple-500 border-b-4  rounded-lg shadow-lg">
+                        class="mb-3 flex flex-col gap-1 hover-pointer py-2 px-4 bg-white border border-gray-200 hover:border-b-purple-500 border-b-2  rounded-md shadow">
                         <span class="text-sm md:text-xl font-semibold tracking-tight text-gray-900">{{ deck.name }}</span>
                         <span class="text-sm font-semibold text-gray-600">{{ deck.cardNumber }} card</span>
                     </router-link>
