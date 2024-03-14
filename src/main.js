@@ -5,7 +5,10 @@ import router from './router/index'
 import { createPinia } from 'pinia'
 import axios from './axios' 
 import { useUserStore } from './stores/useUserStore.js'
-import { mapActions } from 'pinia'
+import {auth} from './ufirebase/main.js'
+
+import { onAuthStateChanged } from 'firebase/auth'
+
 
 
 
@@ -16,16 +19,14 @@ app.use(pinia)
 app.mount('#app')
 app.config.globalProperties.$axios = axios
 
-if(localStorage.getItem('token')) {
-    const useUser = useUserStore()
-    axios.get('api/v1/user')
-    .then(() => {
-        useUser.setAuthenticated(true)
-    })
-    .catch(() => {
-        useUser.setAuthenticated(false)
-    })
-}
+
+const useUser = useUserStore()
+
+onAuthStateChanged(auth, user => {
+    if (user) useUser.setAuthenticated(true)    
+    else useUser.setAuthenticated(false)
+    router.push('/')
+})
 
 
 

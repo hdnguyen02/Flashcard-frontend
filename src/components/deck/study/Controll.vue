@@ -46,15 +46,24 @@ export default {
   }, 
   methods: {
     getCardsToStudy() {
-      this.$axios.get(`api/v1/decks/${this.idDeck}/cards/study`)
-        .then(apiResponse => {
+
+      let urlApi = `api/v1/decks/${this.idDeck}/cards/study` 
+
+      console.log(urlApi)
+
+      this.$axios.get(urlApi)
+        .then(apiResponse => {;
           const response = apiResponse.data
           this.cards = response.data
           this.nCards = this.cards.length
           if (this.cards.length == 0) return
           this.calcNTypeCard()
         })
-        .catch(error=>console.log(error))
+        .catch(error=>{
+          console.log(error)
+          console.log("có chạy vào đây")
+        
+        })
     }, 
     calcNTypeCard() {
       this.nTypeCard.fresh = this.nTypeCard.learning = this.nTypeCard.review = 0 

@@ -1,13 +1,11 @@
 <template>
     <nav
-        class="fixed top-0 z-50 flex-no-wrap flex w-full items-center justify-between bg-[#FBFBFB] py-2 shadow-md shadow-black/5 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap lg:justify-start lg:py-">
+        class="h-[71px] fixed top-0 z-50 flex-no-wrap flex w-full items-center justify-between bg-[#FBFBFB] py-2 shadow-md shadow-black/5 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap lg:justify-start lg:py-">
         <div class="flex w-full flex-wrap items-center justify-between px-3">
-            <!-- Hambu  rger button for mobile view -->
             <button
                 class="block border-0 bg-transparent px-2 text-neutral-500 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0 dark:text-neutral-200 lg:hidden"
                 type="button" data-te-collapse-init data-te-target="#navbarSupportedContent1"
                 aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
-
                 <span class="[&>svg]:w-7">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7">
                         <path fill-rule="evenodd"
@@ -71,15 +69,13 @@
                     <router-link to="/login" class="text-gray-500 font-medium">Đăng nhập</router-link>
                 </div>
                 <div v-if="!userStore.getIsAuthenticated">
-                    <router-link to="/register"
-                        class="text-black inline-block rounded px-6 py-1.5 font-medium shadow-md"
+                    <router-link to="/register" class="text-black inline-block rounded px-6 py-1.5 font-medium shadow-md"
                         style="background-color: #FFCD1F">
                         Đăng ký
                     </router-link>
                 </div>
 
                 <div>
-
                     <div v-if="userStore.getIsAuthenticated" class="flex gap-3">
                         <div class="dropdown">
                             <div class="dropdown-btn">
@@ -93,8 +89,6 @@
                                 <router-link to="/classes">Class</router-link>
                             </div>
                         </div>
-
-
                         <div class="dropdown">
                             <div class="dropdown-btn">
                                 <img class="rounded-full h-8 w-8"
@@ -108,7 +102,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -119,6 +112,8 @@
 import { mapStores } from 'pinia'
 import { useUserStore } from '../stores/useUserStore.js'
 import { useTopicStore } from '../stores/useTopicStore.js'
+import { auth } from '../ufirebase/main'
+import {signOut} from 'firebase/auth'
 
 export default {
     computed: {
@@ -131,9 +126,9 @@ export default {
     },
     methods: {
         handleLogout() {
-            localStorage.removeItem("token")
-            this.userStore.setAuthenticated(false)
-            this.$router.push('/')
+            localStorage.removeItem("idToken")
+            signOut(auth)
+       
         }
     },
     created() {
